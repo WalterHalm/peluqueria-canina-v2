@@ -1,0 +1,128 @@
+<odoo>
+  <data>
+    <record id="view_peluqueria_mascota_kanban" model="ir.ui.view">
+      <field name="name">peluqueria_canina_mascotas_kanban</field>
+      <field name="model">peluqueria.mascota</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <field name="name" />
+          <field name="id" />
+          <templates>
+            <t t-name="card">
+              <div class="oe_kanban_card oe_kanban_global_click" 
+                   style="border: 1px solid #d3d3d3; border-radius: 8px; padding: 10px; box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);">
+                <div class="o_kanban_image">
+                  <img t-att-src="'/web/image/peluqueria.mascota/' + record.id.raw_value + '/image'" alt="Mascota" style="max-width: 64px; max-height: 64px;" />
+                </div>
+                <div class="o_kanban_details">
+                  <strong><field name="name" /></strong>
+                  <div>Próximo Turno: <field name="turno_prox" /></div>
+                  <div>Dueño: <field name="owner_id" /></div>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+
+    <record model="ir.ui.view" id="peluqueria_canina_mascotas_list">
+      <field name="name">peluqueria_canina mascotas list</field>
+      <field name="model">peluqueria.mascota</field>
+      <field name="arch" type="xml">
+        <list>
+          <field name="name"/>
+          <field name="owner_id"/>
+          <field name="owner_phone"/>
+        </list>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="peluqueria_canina_mascotas_form">
+      <field name="name">peluqueria_canina mascotas form</field>
+      <field name="model">peluqueria.mascota</field>
+      <field name="arch" type="xml">
+        <form string="Mascota">
+          <sheet>
+            <div class="row mb16">
+              <div class="col-8">
+                <div class="oe_title">
+                  <label class="o_form_label" for="name" style="font-size: 24px; font-weight: bold;">Nombre</label>
+                  <field name="name" class="o_field_widget" style="font-size: 30px;"/>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-6">
+                <group>
+                  <field name="fecha_nacimiento"/>
+                  <field name="edad"/>
+                  <field name="raza"/>
+                  <field name="peso"/>
+                  <field name="medida"/>
+                   <field name="color"/>
+                  <field name="cuidado_especial"/>
+                  <field name="cual" invisible="cuidado_especial == 'no'"/>
+                  <field name="comportamiento"/>
+                  <field name="descripcion"/>
+                </group>
+              </div>
+              <div class="col-6">
+                <group>
+                  <field name="owner_id"/>
+                  <field name="owner_phone" readonly="1"/>
+                  <field name="image" widget="image" class="oe_avatar" options="{'size': [200, 200]}"/>
+                </group>
+              </div>
+            </div>
+            
+            <notebook>
+              <page string="Turnos">
+                <group>
+                  <field name="turno_prox"/>                                  
+                </group>
+              </page>
+            </notebook>    
+
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+
+
+    <record model="ir.ui.view" id="peluqueria_canina_mascotas_search">
+    <field name="name">peluqueria_canina mascotas search</field>
+    <field name="model">peluqueria.mascota</field>
+    <field name="arch" type="xml">
+        <search string="Buscar Mascota">
+            <field name="name" string="Nombre"/>
+            <field name="owner_id" string="Dueño"/>
+            <field name="raza" string="Raza"/>
+            <filter name="filter_no_special_care" string="Sin Cuidado Especial" domain="[('cuidado_especial', '=', 'no')]"/>
+            <filter name="filter_special_care" string="Con Cuidado Especial" domain="[('cuidado_especial', '=', 'si')]"/>
+            <filter name="group_name" string="Nombre" context="{'group_by': 'name'}"/>
+            <filter name="group_owner" string="Dueño" context="{'group_by': 'owner_id'}"/>
+            <filter name="group_raza" string="Raza" context="{'group_by': 'raza'}"/>
+        </search>
+    </field>
+</record>
+
+
+    <record model="ir.actions.act_window" id="peluqueria_canina.action_mascota_window">
+      <field name="name">Mascotas</field>
+      <field name="res_model">peluqueria.mascota</field>
+      <field name="view_mode">kanban,list,form</field>
+      <field name="view_id" ref="view_peluqueria_mascota_kanban"/>
+      <field name="search_view_id" ref="peluqueria_canina_mascotas_search"/>
+      
+    </record>
+
+    <menuitem name="Peluqueria Patitas" id="peluqueria_canina.menu_root"/>
+    <menuitem name="Mascotas" id="peluqueria_canina.menu_2" parent="peluqueria_canina.menu_root"/>
+    <menuitem name="Mascotas" id="peluqueria_canina.menu_2_mascotas_list" parent="peluqueria_canina.menu_root"
+              action="peluqueria_canina.action_mascota_window"/>
+  </data>
+</odoo>

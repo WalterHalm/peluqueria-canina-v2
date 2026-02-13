@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vista Calendario de Turnos -->
+        <record id="view_turno_calendar" model="ir.ui.view">
+            <field name="name">peluqueria.turno.calendar</field>
+            <field name="model">peluqueria.turno</field>
+            <field name="arch" type="xml">
+                <calendar string="Calendario de Turnos" date_start="fecha_hora" date_stop="fecha_hora_fin" color="state" mode="week" quick_create="0" event_open_popup="1">
+                    <field name="mascota_id"/>
+                    <field name="cliente_id"/>
+                    <field name="state"/>
+                    <field name="servicio_ids" widget="many2many_tags"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Vista Kanban de Turnos -->
+        <record id="view_turno_kanban" model="ir.ui.view">
+            <field name="name">peluqueria.turno.kanban</field>
+            <field name="model">peluqueria.turno</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="state" class="o_kanban_mobile" sample="1">
+                    <field name="color"/>
+                    <field name="mascota_id"/>
+                    <field name="cliente_id"/>
+                    <field name="fecha_hora"/>
+                    <field name="state"/>
+                    <field name="es_hoy"/>
+                    <field name="esta_atrasado"/>
+                    <templates>
+                        <t t-name="card">
+                            <div t-attf-class="oe_kanban_card oe_kanban_global_click #{record.esta_atrasado.raw_value ? 'border-danger' : ''}">
+                                <div class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <strong><field name="mascota_id"/></strong>
+                                        </div>
+                                        <div class="o_secondary text-muted">
+                                            <field name="cliente_id"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="o_kanban_card_content">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <i class="fa fa-clock-o"/> <field name="fecha_hora" widget="datetime"/>
+                                        </div>
+                                        <div class="col-12 mt-2">
+                                            <field name="servicio_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2" t-if="record.es_hoy.raw_value">
+                                        <div class="col-12">
+                                            <span class="badge rounded-pill text-bg-warning">HOY</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="o_kanban_card_footer">
+                                    <button name="action_confirmar" type="object" class="btn btn-sm btn-primary" invisible="state != 'borrador'">
+                                        Confirmar
+                                    </button>
+                                    <button name="action_completar" type="object" class="btn btn-sm btn-success" invisible="state not in ['confirmado', 'en_proceso']">
+                                        Completar
+                                    </button>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- Vista Lista de Turnos -->
+        <record id="view_turno_tree" model="ir.ui.view">
+            <field name="name">peluqueria.turno.tree</field>
+            <field name="model">peluqueria.turno</field>
+            <field name="arch" type="xml">
+                <list string="Turnos" sample="1" decoration-info="es_hoy" decoration-danger="esta_atrasado">
+                    <field name="fecha_hora"/>
+                    <field name="mascota_id"/>
+                    <field name="cliente_id"/>
+                    <field name="telefono"/>
+                    <field name="servicio_ids" widget="many2many_tags"/>
+                    <field name="duracion_total" widget="float_time"/>
+                    <field name="empleado_id"/>
+                    <field name="state" widget="badge" decoration-info="state == 'confirmado'" decoration-warning="state == 'en_proceso'" decoration-success="state == 'completado'" decoration-danger="state == 'cancelado'"/>
+                    <field name="es_hoy" column_invisible="1"/>
+                    <field name="esta_atrasado" column_invisible="1"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista Búsqueda de Turnos -->
+        <record id="view_turno_search" model="ir.ui.view">
+            <field name="name">peluqueria.turno.search</field>
+            <field name="model">peluqueria.turno</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Turnos">
+                    <field name="mascota_id"/>
+                    <field name="cliente_id"/>
+                    <field name="servicio_ids"/>
+                    <field name="empleado_id"/>
+                    <separator/>
+                    <filter string="Confirmados" name="filter_confirmados" domain="[('state', '=', 'confirmado')]"/>
+                    <filter string="Borrador" name="filter_borrador" domain="[('state', '=', 'borrador')]"/>
+                    <group>
+                        <filter string="Cliente" name="group_cliente" context="{'group_by': 'cliente_id'}"/>
+                        <filter string="Mascota" name="group_mascota" context="{'group_by': 'mascota_id'}"/>
+                        <filter string="Empleado" name="group_empleado" context="{'group_by': 'empleado_id'}"/>
+                        <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Vista Formulario de Turnos -->
+        <record id="view_turno_form" model="ir.ui.view">
+            <field name="name">peluqueria.turno.form</field>
+            <field name="model">peluqueria.turno</field>
+            <field name="arch" type="xml">
+                <form string="Turno">
+                    <header>
+                        <button name="action_confirmar" string="Confirmar" type="object" class="oe_highlight" invisible="state != 'borrador'"/>
+                        <button name="action_completar" string="Iniciar Atención" type="object" class="oe_highlight" invisible="state != 'confirmado'"/>
+                        <button name="action_no_asistio" string="No Asistió" type="object" invisible="state not in ['borrador', 'confirmado']"/>
+                        <field name="state" widget="statusbar" statusbar_visible="borrador,confirmado,asistio"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_enviar_recordatorio" type="object" class="oe_stat_button" icon="fa-bell" invisible="recordatorio_enviado">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Enviar</span>
+                                    <span class="o_stat_text">Recordatorio</span>
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="display_name"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="mascota_id" options="{'no_create': True}"/>
+                                <field name="cliente_id"/>
+                                <field name="telefono"/>
+                            </group>
+                            <group>
+                                <field name="fecha_hora"/>
+                                <field name="fecha_hora_fin"/>
+                                <field name="duracion_total" widget="float_time"/>
+                                <field name="empleado_id"/>
+                            </group>
+                        </group>
+                        
+                        <group>
+                            <field name="servicio_ids" widget="many2many_tags" options="{'color_field': 'color', 'no_create': True}"/>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Notas">
+                                <field name="notas" placeholder="Observaciones o instrucciones especiales..."/>
+                            </page>
+                            <page string="Información Adicional">
+                                <group>
+                                    <group>
+                                        <field name="recordatorio_enviado"/>
+                                        <field name="fecha_recordatorio"/>
+                                    </group>
+                                    <group>
+                                        <field name="visita_id"/>
+                                        <field name="motivo_cancelacion" invisible="state != 'cancelado'"/>
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción -->
+        <record id="action_turno" model="ir.actions.act_window">
+            <field name="name">Turnos</field>
+            <field name="res_model">peluqueria.turno</field>
+            <field name="view_mode">calendar,kanban,list,form</field>
+            <field name="view_id" ref="view_turno_calendar"/>
+            <field name="search_view_id" ref="view_turno_search"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Agendar un nuevo turno
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,52 @@
+<odoo>
+  <data>
+    <!-- Menú principal para Turnos -->
+    <menuitem id="menu_turnos" name="Turnos" parent="peluqueria_canina.menu_root" sequence="20"/>
+
+    <!-- Submenú para la vista de lista -->
+    <record id="view_turno_tree" model="ir.ui.view">
+        <field name="name">turno.tree</field>
+        <field name="model">peluqueria.mascota</field>
+        <field name="arch" type="xml">
+            <list string="Turnos">
+                <field name="name"/> <!-- Nombre de la mascota -->
+                <field name="turno_prox"/> <!-- Campo proximo_turno -->
+            </list>
+        </field>
+    </record>
+
+    <!-- Submenú para la vista de calendario -->
+    <record id="view_turno_calendar" model="ir.ui.view">
+        <field name="name">turno.calendar</field>
+        <field name="model">peluqueria.mascota</field>
+        <field name="arch" type="xml">
+            <calendar string="Turnos" date_start="turno_prox">
+                <field name="name"/> <!-- Nombre de la mascota -->
+                <field name="turno_prox"/> <!-- Campo proximo_turno -->
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Acción para mostrar la vista de lista -->
+    <record id="action_turno_tree" model="ir.actions.act_window">
+        <field name="name">Turnos</field>
+        <field name="res_model">peluqueria.mascota</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_turno_tree"/>
+    </record>
+
+    <!-- Submenú para la vista de lista -->
+    <menuitem id="submenu_turno_list" name="Lista de Turnos" parent="menu_turnos" action="action_turno_tree" sequence="1"/>
+
+    <!-- Acción para mostrar la vista de calendario -->
+    <record id="action_turno_calendar" model="ir.actions.act_window">
+        <field name="name">Calendario de Turnos</field>
+        <field name="res_model">peluqueria.mascota</field>
+        <field name="view_mode">calendar</field>
+        <field name="view_id" ref="view_turno_calendar"/>
+    </record>
+
+    <!-- Submenú para la vista de calendario -->
+    <menuitem id="submenu_turno_calendar" name="Calendario de Turnos" parent="menu_turnos" action="action_turno_calendar" sequence="2"/>
+  </data>
+</odoo>

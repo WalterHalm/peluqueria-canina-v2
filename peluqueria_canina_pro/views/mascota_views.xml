@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Heredar vista form de mascota -->
+        <record id="view_mascota_form_inherit_pro" model="ir.ui.view">
+            <field name="name">peluqueria.mascota.form.inherit.pro</field>
+            <field name="model">peluqueria.mascota</field>
+            <field name="inherit_id" ref="peluqueria_canina.peluqueria_canina_mascotas_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Agregar botones estadísticos -->
+                <xpath expr="//sheet" position="before">
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_ver_turnos" type="object" class="oe_stat_button" icon="fa-calendar">
+                            <field name="turno_count" widget="statinfo" string="Turnos"/>
+                        </button>
+                        <button name="action_ver_visitas" type="object" class="oe_stat_button" icon="fa-history">
+                            <field name="visita_count" widget="statinfo" string="Visitas"/>
+                        </button>
+                        <button name="action_agendar_turno" type="object" class="oe_stat_button" icon="fa-plus-circle" string="Nuevo Turno"/>
+                    </div>
+                </xpath>
+                
+                <!-- Agregar campos en el notebook -->
+                <xpath expr="//notebook/page[1]" position="after">
+                    <page string="Historial PRO">
+                        <group>
+                            <group>
+                                <field name="ultima_visita" readonly="1"/>
+                                <field name="proxima_visita" readonly="1"/>
+                            </group>
+                            <group>
+                                <field name="total_gastado" widget="monetary" readonly="1"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Turnos">
+                                <field name="turno_ids">
+                                    <list>
+                                        <field name="fecha_hora"/>
+                                        <field name="servicio_ids" widget="many2many_tags"/>
+                                        <field name="empleado_id"/>
+                                        <field name="state" widget="badge" decoration-info="state == 'confirmado'" decoration-warning="state == 'en_proceso'" decoration-success="state == 'completado'"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Visitas">
+                                <field name="visita_ids">
+                                    <list>
+                                        <field name="fecha"/>
+                                        <field name="servicio_ids" widget="many2many_tags"/>
+                                        <field name="total_venta" widget="monetary" sum="Total"/>
+                                        <field name="ganancia" widget="monetary" sum="Ganancia"/>
+                                        <field name="state" widget="badge" decoration-success="state == 'facturado'" decoration-warning="state == 'en_proceso'"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </page>
+                </xpath>
+                
+            </field>
+        </record>
+        
+    </data>
+</odoo>

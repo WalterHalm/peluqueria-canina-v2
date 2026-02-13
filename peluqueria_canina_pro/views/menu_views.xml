@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Menú Principal -->
+        <menuitem id="menu_peluqueria_pro_root" 
+                  name="Peluquería PRO" 
+                  sequence="10"
+                  web_icon="peluqueria_canina_pro,static/description/icon.png"/>
+
+        <!-- Dashboard -->
+        <menuitem id="menu_dashboard" 
+                  name="Dashboard" 
+                  parent="menu_peluqueria_pro_root" 
+                  action="action_peluqueria_dashboard" 
+                  sequence="1"/>
+
+        <!-- Operaciones -->
+        <menuitem id="menu_operaciones" 
+                  name="Operaciones" 
+                  parent="menu_peluqueria_pro_root" 
+                  sequence="10"/>
+
+        <menuitem id="menu_turnos" 
+                  name="Turnos" 
+                  parent="menu_operaciones" 
+                  action="action_turno" 
+                  sequence="1"/>
+
+        <menuitem id="menu_turnos_vivo" 
+                  name="Turnos en Vivo" 
+                  parent="menu_operaciones" 
+                  action="action_visita_vivo" 
+                  sequence="2"/>
+
+        <menuitem id="menu_visitas" 
+                  name="Historial de Visitas" 
+                  parent="menu_operaciones" 
+                  action="action_visita" 
+                  sequence="3"/>
+
+        <!-- Configuración -->
+        <menuitem id="menu_configuracion" 
+                  name="Configuración" 
+                  parent="menu_peluqueria_pro_root" 
+                  sequence="90"/>
+
+        <menuitem id="menu_servicios" 
+                  name="Servicios" 
+                  parent="menu_configuracion" 
+                  action="action_servicio" 
+                  sequence="1"/>
+
+    </data>
+</odoo>

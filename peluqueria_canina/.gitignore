@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Odoo
+*.pyc
+*.pyo
+*.log
+*.pot
+*.mo
+filestore/
+sessions/
+.odoo_history
+
+# Database
+*.sql
+*.db
+*.sqlite
+
+# Environment variables
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.amazonq/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backups
+*.bak
+*.backup
+backup_*
+
+# Logs
+logs/
+*.log
+
+# Cache
+limpiar_cache.bat
+
+# Migration scripts (opcional - comentar si quieres subirlos)
+migration/

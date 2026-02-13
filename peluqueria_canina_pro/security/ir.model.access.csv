@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_peluqueria_servicio,access_peluqueria_servicio,model_peluqueria_servicio,,1,1,1,1
+access_peluqueria_servicio_producto,access_peluqueria_servicio_producto,model_peluqueria_servicio_producto,,1,1,1,1
+access_peluqueria_turno,access_peluqueria_turno,model_peluqueria_turno,,1,1,1,1
+access_peluqueria_visita,access_peluqueria_visita,model_peluqueria_visita,,1,1,1,1
+access_peluqueria_visita_producto,access_peluqueria_visita_producto,model_peluqueria_visita_producto,,1,1,1,1
+access_peluqueria_dashboard,access_peluqueria_dashboard,model_peluqueria_dashboard,,1,1,1,1

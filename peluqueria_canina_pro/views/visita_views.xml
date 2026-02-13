@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Vista Formulario de Visitas con Centro de Costos -->
+        <record id="view_visita_form" model="ir.ui.view">
+            <field name="name">peluqueria.visita.form</field>
+            <field name="model">peluqueria.visita</field>
+            <field name="arch" type="xml">
+                <form string="Atención en Vivo">
+                    <header>
+                        <button name="action_iniciar" string="Iniciar" type="object" class="oe_highlight" invisible="state != 'nuevo'"/>
+                        <button name="action_terminar" string="Terminar" type="object" class="oe_highlight" invisible="state != 'en_proceso'"/>
+                        <button name="action_no_asistio" string="No Asistió" type="object" invisible="state != 'nuevo'"/>
+                        <field name="state" widget="statusbar" statusbar_visible="nuevo,en_proceso,terminado"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive" invisible="state != 'cancelado'">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_text">Cancelado</span>
+                                </div>
+                            </button>
+                        </div>
+                        
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="mascota_id"/>
+                                <field name="cliente_id"/>
+                                <field name="fecha"/>
+                            </group>
+                            <group>
+                                <field name="empleado_id"/>
+                                <field name="turno_id" readonly="1"/>
+                                <field name="factura_id" readonly="1"/>
+                                <field name="facturado" invisible="1"/>
+                            </group>
+                        </group>
+                        
+                        <!-- CENTRO DE COSTOS DESTACADO -->
+                        <div class="alert alert-success" role="alert">
+                            <h4 class="alert-heading">💰 Centro de Costos</h4>
+                            <hr/>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <strong>Ingresos:</strong>
+                                    <div class="ms-3">
+                                        <div>Servicios: <field name="precio_servicios" widget="monetary" class="fw-bold text-success"/></div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <strong>Costos:</strong>
+                                    <div class="ms-3">
+                                        <div>Productos: <field name="costo_productos" widget="monetary" class="text-danger"/></div>
+                                        <div>Otros Gastos: <field name="otros_gastos" widget="monetary" class="text-danger"/></div>
+                                        <div>Total Costos: <field name="costo_total" widget="monetary" class="fw-bold text-danger"/></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr/>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <h5>Total Venta: <field name="total_venta" widget="monetary" class="text-primary"/></h5>
+                                </div>
+                                <div class="col-md-6">
+                                    <h5>Ganancia: <field name="ganancia" widget="monetary" class="ganancia_positiva"/> (<field name="margen_porcentaje" widget="percentage"/>)</h5>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <notebook>
+                            <page string="Servicios">
+                                <field name="servicio_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            </page>
+                            <page string="Productos Utilizados">
+                                <field name="producto_line_ids">
+                                    <list editable="bottom">
+                                        <field name="producto_id"/>
+                                        <field name="cantidad"/>
+                                        <field name="uom_id"/>
+                                        <field name="costo_unitario"/>
+                                        <field name="subtotal_costo" sum="Total"/>
+                                    </list>
+                                </field>
+                            </page>
+                            <page string="Fotos Antes/Después">
+                                <group>
+                                    <group string="Antes">
+                                        <field name="imagen_antes" widget="image" class="oe_avatar" options="{'size': [400, 400]}"/>
+                                    </group>
+                                    <group string="Después">
+                                        <field name="imagen_despues" widget="image" class="oe_avatar" options="{'size': [400, 400]}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Observaciones">
+                                <group>
+                                    <field name="notas" placeholder="Observaciones de la visita..."/>
+                                    <field name="notas_internas" placeholder="Notas internas del personal..."/>
+                                </group>
+                            </page>
+                        </notebook>
+                        
+                        <field name="currency_id" invisible="1"/>
+                    </sheet>
+                    <chatter/>
+                </form>
+            </field>
+        </record>
+
+        <!-- Vista Lista -->
+        <record id="view_visita_tree" model="ir.ui.view">
+            <field name="name">peluqueria.visita.tree</field>
+            <field name="model">peluqueria.visita</field>
+            <field name="arch" type="xml">
+                <list string="Visitas" sample="1">
+                    <field name="name"/>
+                    <field name="fecha"/>
+                    <field name="mascota_id"/>
+                    <field name="cliente_id"/>
+                    <field name="total_venta" widget="monetary" sum="Total"/>
+                    <field name="costo_total" widget="monetary" sum="Total"/>
+                    <field name="ganancia" widget="monetary" sum="Total" decoration-success="ganancia &gt; 0" decoration-danger="ganancia &lt; 0"/>
+                    <field name="margen_porcentaje" widget="percentage"/>
+                    <field name="state" widget="badge" decoration-success="state == 'facturado'" decoration-warning="state == 'en_proceso'" decoration-info="state == 'confirmado'"/>
+                </list>
+            </field>
+        </record>
+
+        <!-- Vista Búsqueda de Visitas -->
+        <record id="view_visita_search" model="ir.ui.view">
+            <field name="name">peluqueria.visita.search</field>
+            <field name="model">peluqueria.visita</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Visitas">
+                    <field name="name"/>
+                    <field name="mascota_id"/>
+                    <field name="cliente_id"/>
+                    <field name="servicio_ids"/>
+                    <field name="empleado_id"/>
+                    <separator/>
+                    <filter string="Terminadas" name="filter_terminado" domain="[('state', '=', 'terminado')]"/>
+                    <filter string="En Proceso" name="filter_en_proceso" domain="[('state', '=', 'en_proceso')]"/>
+                    <filter string="Facturadas" name="filter_facturado" domain="[('facturado', '=', True)]"/>
+                    <group>
+                        <filter string="Cliente" name="group_cliente" context="{'group_by': 'cliente_id'}"/>
+                        <filter string="Mascota" name="group_mascota" context="{'group_by': 'mascota_id'}"/>
+                        <filter string="Empleado" name="group_empleado" context="{'group_by': 'empleado_id'}"/>
+                        <filter string="Estado" name="group_state" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- Acción Turnos en Vivo -->
+        <record id="action_visita_vivo" model="ir.actions.act_window">
+            <field name="name">Turnos en Vivo</field>
+            <field name="res_model">peluqueria.visita</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="domain">[('state', 'in', ['nuevo', 'en_proceso'])]</field>
+            <field name="context">{'search_default_group_state': 1}</field>
+            <field name="search_view_id" ref="view_visita_search"/>
+        </record>
+
+        <!-- Acción Historial -->
+        <record id="action_visita" model="ir.actions.act_window">
+            <field name="name">Historial de Visitas</field>
+            <field name="res_model">peluqueria.visita</field>
+            <field name="view_mode">list,form</field>
+            <field name="domain">[('state', '=', 'terminado')]</field>
+            <field name="search_view_id" ref="view_visita_search"/>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_peluqueria_canina_cliente,access_peluqueria_canina_cliente,model_res_partner,,1,1,1,1
+access_peluqueria_mascota,access_peluqueria_mascota,model_peluqueria_mascota,,1,1,1,1
+

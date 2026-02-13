@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vista Kanban de Servicios -->
+    <record id="view_servicio_kanban" model="ir.ui.view">
+            <field name="name">peluqueria.servicio.kanban</field>
+            <field name="model">peluqueria.servicio</field>
+            <field name="arch" type="xml">
+                <kanban class="o_kanban_mobile" sample="1">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="precio"/>
+                    <field name="duracion_display"/>
+                    <field name="categoria"/>
+                    <field name="margen"/>
+                    <field name="color"/>
+                    <field name="visita_count"/>
+                    <templates>
+                        <t t-name="card">
+                            <div class="oe_kanban_card oe_kanban_global_click" style="border-left: 4px solid #667eea;">
+                                <div class="o_kanban_card_header">
+                                    <div class="o_kanban_card_header_title">
+                                        <div class="o_primary">
+                                            <strong><field name="name"/></strong>
+                                        </div>
+                                        <div class="o_secondary">
+                                            <span class="badge bg-primary">
+                                                <field name="categoria"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="o_kanban_card_content mt-2">
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <small class="text-muted">Precio</small>
+                                            <div class="fw-bold text-success">
+                                                <field name="precio" widget="monetary"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">Duración</small>
+                                            <div class="fw-bold">
+                                                <field name="duracion_display"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="row mt-2">
+                                        <div class="col-6">
+                                            <small class="text-muted">Margen</small>
+                                            <div class="fw-bold text-info">
+                                                <field name="margen"/>%
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted">Veces Realizado</small>
+                                            <div class="fw-bold">
+                                                <field name="visita_count"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+    </record>
+
+    <!-- Vista Lista de Servicios -->
+    <record id="view_servicio_tree" model="ir.ui.view">
+            <field name="name">peluqueria.servicio.tree</field>
+            <field name="model">peluqueria.servicio</field>
+            <field name="arch" type="xml">
+                <list string="Servicios" sample="1" multi_edit="1">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="categoria"/>
+                    <field name="precio" widget="monetary"/>
+                    <field name="costo_estimado" widget="monetary"/>
+                    <field name="margen" decoration-success="margen &gt;= 70" decoration-warning="margen &lt; 70 and margen &gt;= 50" decoration-danger="margen &lt; 50"/>
+                    <field name="duracion_display"/>
+                    <field name="visita_count"/>
+                    <field name="active" widget="boolean_toggle"/>
+                </list>
+            </field>
+    </record>
+
+    <!-- Vista Formulario de Servicios -->
+    <record id="view_servicio_form" model="ir.ui.view">
+            <field name="name">peluqueria.servicio.form</field>
+            <field name="model">peluqueria.servicio</field>
+            <field name="arch" type="xml">
+                <form string="Servicio">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="action_view_visitas" type="object" class="oe_stat_button" icon="fa-history">
+                                <field name="visita_count" widget="statinfo" string="Visitas"/>
+                            </button>
+                        </div>
+                        
+                        <widget name="web_ribbon" title="Archivado" bg_color="text-bg-danger" invisible="active"/>
+                        
+                        <field name="image" widget="image" class="oe_avatar" options="{'preview_image': 'image', 'size': [150, 150]}"/>
+                        
+                        <div class="oe_title">
+                            <label for="name" class="oe_edit_only"/>
+                            <h1>
+                                <field name="name" placeholder="Ej: Baño Completo"/>
+                            </h1>
+                        </div>
+                        
+                        <group>
+                            <group>
+                                <field name="code"/>
+                                <field name="categoria"/>
+                                <field name="active" widget="boolean_toggle"/>
+                                <field name="sequence"/>
+                            </group>
+                            <group>
+                                <field name="precio" widget="monetary"/>
+                                <field name="costo_estimado" widget="monetary" readonly="1"/>
+                                <field name="margen" decoration-success="margen &gt;= 70" decoration-warning="margen &lt; 70 and margen &gt;= 50" decoration-danger="margen &lt; 50"/>
+                                <field name="duracion"/>
+                                <field name="duracion_display"/>
+                                <field name="currency_id" invisible="1"/>
+                            </group>
+                        </group>
+                        
+                        <notebook>
+                            <page string="Descripción">
+                                <field name="description" placeholder="Descripción detallada del servicio..."/>
+                            </page>
+                            <page string="Productos Utilizados">
+                                <field name="producto_ids">
+                                    <list editable="bottom">
+                                        <field name="producto_id"/>
+                                        <field name="cantidad"/>
+                                        <field name="uom_id"/>
+                                        <field name="costo_unitario" widget="monetary"/>
+                                        <field name="costo_total" widget="monetary" sum="Total"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+    <!-- Vista de Búsqueda -->
+    <record id="view_servicio_search" model="ir.ui.view">
+        <field name="name">peluqueria.servicio.search</field>
+        <field name="model">peluqueria.servicio</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Servicios">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="categoria"/>
+                <separator/>
+                <filter string="Activos" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Archivados" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción -->
+    <record id="action_servicio" model="ir.actions.act_window">
+            <field name="name">Servicios</field>
+            <field name="res_model">peluqueria.servicio</field>
+            <field name="view_mode">kanban,list,form</field>
+            <field name="view_id" ref="view_servicio_kanban"/>
+            <field name="context">{'search_default_active': 1}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear un nuevo servicio
+                </p>
+                <p>
+                    Define los servicios que ofreces en tu peluquería canina.
+                </p>
+            </field>
+    </record>
+
+</odoo>

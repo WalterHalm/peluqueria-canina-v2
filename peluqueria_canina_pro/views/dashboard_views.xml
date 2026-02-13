@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        
+        <!-- Dashboard Principal -->
+        <record id="view_peluqueria_dashboard" model="ir.ui.view">
+            <field name="name">peluqueria.dashboard.form</field>
+            <field name="model">peluqueria.dashboard</field>
+            <field name="arch" type="xml">
+                <form string="Dashboard Peluquería" create="false" edit="false" delete="false">
+                    <sheet>
+                        <div class="container-fluid">
+                            
+                            <!-- Filtros -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div style="background: #f8f9fa; border: 2px solid #dee2e6; border-radius: 8px; padding: 20px;">
+                                        <h4 style="margin-bottom: 15px; color: #495057;">🔍 Filtros</h4>
+                                        <group>
+                                            <group string="Rango de Fechas">
+                                                <field name="fecha_desde" nolabel="1" placeholder="Desde"/>
+                                                <field name="fecha_hasta" nolabel="1" placeholder="Hasta"/>
+                                            </group>
+                                            <group string="Filtros Adicionales">
+                                                <field name="periodo" nolabel="1"/>
+                                                <field name="servicio_id" nolabel="1" placeholder="Todos los servicios"/>
+                                            </group>
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- KPIs Row -->
+                            <div class="row">
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <button name="action_ver_turnos_hoy" type="object" class="btn-link w-100 text-start p-0">
+                                        <div class="peluqueria_kpi_card">
+                                            <div class="peluqueria_kpi_label">Turnos Hoy</div>
+                                            <div class="peluqueria_kpi_value">
+                                                <field name="turnos_hoy" readonly="1"/>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </div>
+                                
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <button name="action_ver_ventas_hoy" type="object" class="btn-link w-100 text-start p-0">
+                                        <div class="peluqueria_kpi_card success">
+                                            <div class="peluqueria_kpi_label">Ventas Hoy</div>
+                                            <div class="peluqueria_kpi_value">
+                                                <field name="ventas_hoy" widget="monetary" readonly="1"/>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </div>
+                                
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <button name="action_ver_turnos_pendientes" type="object" class="btn-link w-100 text-start p-0">
+                                        <div class="peluqueria_kpi_card warning">
+                                            <div class="peluqueria_kpi_label">Pendientes</div>
+                                            <div class="peluqueria_kpi_value">
+                                                <field name="turnos_pendientes" readonly="1"/>
+                                            </div>
+                                        </div>
+                                    </button>
+                                </div>
+                                
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <div class="peluqueria_kpi_card info">
+                                        <div class="peluqueria_kpi_label">Ganancia Hoy</div>
+                                        <div class="peluqueria_kpi_value">
+                                            <field name="ganancia_hoy" widget="monetary" readonly="1"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Resumen Mensual -->
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h3>💰 Resumen del Periodo</h3>
+                                    <div class="centro_costos_box">
+                                        <div class="centro_costos_row">
+                                            <span class="centro_costos_label">Ventas Totales:</span>
+                                            <span class="centro_costos_value">
+                                                <field name="ventas_periodo" widget="monetary" readonly="1"/>
+                                            </span>
+                                        </div>
+                                        <div class="centro_costos_row">
+                                            <span class="centro_costos_label">Costos Totales:</span>
+                                            <span class="centro_costos_value">
+                                                <field name="costos_periodo" widget="monetary" readonly="1"/>
+                                            </span>
+                                        </div>
+                                        <div class="centro_costos_row">
+                                            <span class="centro_costos_label">Ganancia:</span>
+                                            <span class="ganancia_positiva">
+                                                <field name="ganancia_periodo" widget="monetary" readonly="1"/> 
+                                                (<field name="margen_periodo" readonly="1"/>%)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <field name="currency_id" invisible="1"/>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Acción del Dashboard -->
+        <record id="action_peluqueria_dashboard" model="ir.actions.act_window">
+            <field name="name">Dashboard</field>
+            <field name="res_model">peluqueria.dashboard</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_peluqueria_dashboard"/>
+            <field name="target">main</field>
+        </record>
+
+    </data>
+</odoo>

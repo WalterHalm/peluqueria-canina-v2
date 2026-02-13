@@ -1,0 +1,171 @@
+/* Dashboard Peluquería Canina PRO - Responsive Design */
+
+/* KPI Cards */
+.peluqueria_kpi_card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 15px;
+}
+
+.peluqueria_kpi_card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+}
+
+.peluqueria_kpi_card.success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.peluqueria_kpi_card.warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.peluqueria_kpi_card.info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.peluqueria_kpi_value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.peluqueria_kpi_label {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Centro de Costos */
+.centro_costos_box {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 15px 0;
+    border-left: 4px solid #667eea;
+}
+
+.centro_costos_row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.centro_costos_row:last-child {
+    border-bottom: none;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #28a745;
+}
+
+.centro_costos_label {
+    color: #6c757d;
+}
+
+.centro_costos_value {
+    font-weight: 600;
+    color: #212529;
+}
+
+/* Ganancia destacada */
+.ganancia_positiva {
+    color: #28a745 !important;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.ganancia_negativa {
+    color: #dc3545 !important;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Badges de estado */
+.badge_turno {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: inline-block;
+}
+
+.badge_confirmado {
+    background-color: #007bff;
+    color: white;
+}
+
+.badge_en_proceso {
+    background-color: #fd7e14;
+    color: white;
+}
+
+.badge_completado {
+    background-color: #28a745;
+    color: white;
+}
+
+.badge_cancelado {
+    background-color: #dc3545;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .peluqueria_kpi_value {
+        font-size: 2rem;
+    }
+    
+    .peluqueria_kpi_card {
+        padding: 15px;
+    }
+    
+    .centro_costos_box {
+        padding: 15px;
+    }
+    
+    .centro_costos_row {
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 576px) {
+    .peluqueria_kpi_value {
+        font-size: 1.5rem;
+    }
+    
+    .peluqueria_kpi_label {
+        font-size: 0.8rem;
+    }
+}
+
+/* Kanban mejorado */
+.o_kanban_record {
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.o_kanban_record:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: scale(1.02);
+}
+
+/* Botones de acción rápida */
+.btn_accion_rapida {
+    margin: 5px;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.btn_accion_rapida:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}

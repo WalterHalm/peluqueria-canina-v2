@@ -1,0 +1,98 @@
+<odoo>
+  <data>
+    <!-- explicit list view definition -->
+
+    <record model="ir.ui.view" id="peluqueria_canina_cliente_list">
+     <field name="name">peluqueria_canina cliente list</field>
+      <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+          <list>
+            <field name="name"/>    
+                 
+          </list>
+          </field>
+        </record>
+
+
+        <record id="peluqueria_canina_cliente_form" model="ir.ui.view">
+            <field name="name">peluqueria_canina cliente form</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">                     
+                    <notebook position="inside">
+                        <page string="Mascotas">
+                            <field name="pet_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="raza"/>
+                                    <field name="edad"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </field>
+            
+        </record>
+
+
+
+
+        
+
+
+    <!-- actions opening views on models -->
+
+     <!-- <record model="ir.actions.act_window" id="peluqueria_canina.action_cliente_window">
+      <field name="name">peluqueria Patitas clientes</field>
+      <field name="res_model">peluqueria_canina.cliente</field>
+      <field name="view_mode">tree,form</field>
+    </record>-->
+
+    <record model="ir.actions.act_window" id="peluqueria_canina.action_personas_window">
+      <field name="name">Clientes</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_mode">kanban,list,form</field>     
+      <field name="domain">[('is_company', '=', False)]</field>
+    </record>
+
+   
+
+
+    <!-- server action to the one above -->
+<!--
+    <record model="ir.actions.server" id="peluqueria_canina.action_server">
+      <field name="name">peluqueria_canina server</field>
+      <field name="model_id" ref="model_peluqueria_canina_peluqueria_canina"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+
+    <menuitem name="Peluqueria Patitas" id="peluqueria_canina.menu_root"/>
+
+    <!-- menu categories -->
+
+    <!--<menuitem name="Clientes" id="peluqueria_canina.menu_1" parent="peluqueria_canina.menu_root"/>  -->  
+    <menuitem name="Personas" id="peluqueria_canina.menu_2" parent="peluqueria_canina.menu_root"/>
+
+    <!-- actions -->
+
+    <!--<menuitem name="Clientes" id="peluqueria_canina.menu_1_cliente_list" parent="peluqueria_canina.menu_1"
+              action="peluqueria_canina.action_cliente_window"/>-->
+
+    <menuitem name="Personas" id="peluqueria_canina.menu_2_cliente_list" parent="peluqueria_canina.menu_root"
+              action="peluqueria_canina.action_personas_window"/>
+              
+  <!--  <menuitem name="Server to list" id="peluqueria_canina" parent="peluqueria_canina.menu_2"
+              action="peluqueria_canina.action_server"/>
+-->
+  </data>
+</odoo>
