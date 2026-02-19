@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Main Menu for Tu Pedido - Direct Dashboard Access -->
+    <menuitem id="menu_tu_pedido_main"
+              name="Tu Pedido"
+              action="action_pedido_dashboard"
+              web_icon="tu_pedido_v3,static/description/icon2.png"
+              sequence="50"/>
+</odoo>

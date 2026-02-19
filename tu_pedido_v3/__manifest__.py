@@ -1,0 +1,55 @@
+{
+    'name': 'Tu Pedido v3',
+    'version': '3.0.0',
+    'category': 'Sales',
+    'summary': 'Sistema completo de gestión de pedidos para restaurantes - Odoo 19',
+    'description': """
+        Sistema de gestión de pedidos con:
+        - Dashboard interactivo con Kanban
+        - Integración eCommerce y PoS
+        - Sistema de notificaciones unificado
+        - Seguimiento en tiempo real
+        - Control por sesión PoS
+        - Compatible con Odoo 19
+    """,
+    'author': 'Walter Halm',
+    'website': 'https://github.com/WalterHalm/tu_pedido_v3',
+    'license': 'LGPL-3',
+    'depends': [
+        'base',
+        'sale',
+        'website_sale',
+        'portal',
+        'point_of_sale',
+        'pos_restaurant',
+        'pos_sale',
+    ],
+    'data': [
+        'security/ir.model.access.csv',
+        'views/dashboard_action.xml',
+        'views/menu_views.xml',
+        'views/sale_order_views.xml',
+        'views/wizard_views.xml',
+        'views/shop_confirmation.xml',
+        'views/shop_cart_status.xml',
+        'views/shop_closed.xml',
+        'views/portal_integration.xml',
+        'views/pos_notifications_views.xml',
+    ],
+    'assets': {
+        'web.assets_backend': [
+            'tu_pedido_v3/static/src/css/dashboard.css',
+            'tu_pedido_v3/static/src/js/dashboard.js',
+            'tu_pedido_v3/static/src/xml/dashboard_template.xml',
+        ],
+        'point_of_sale._assets_pos': [
+            'tu_pedido_v3/static/src/js/pos_kitchen_simple.js',
+            'tu_pedido_v3/static/src/xml/pos_kitchen_simple.xml',
+            'tu_pedido_v3/static/src/js/pos_delivery_notifications_pos.js',
+            'tu_pedido_v3/static/src/css/pos_delivery_notifications_pos.css',
+        ],
+    },
+    'installable': True,
+    'application': True,
+    'auto_install': False,
+}

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="point_of_sale.Navbar" t-inherit="point_of_sale.Navbar" t-inherit-mode="extension">
+        <xpath expr="//div[hasclass('status-buttons')]/div[1]" position="before">
+            <button 
+                    class="btn btn-success btn-lg lh-lg"
+                    t-on-click="() => this.sendToKitchen()">
+                <i class="fa fa-fw fa-cutlery"/>
+                <span t-if="!this.ui.isSmall" class="ms-1">Cocina</span>
+            </button>
+        </xpath>
+    </t>
+</templates>
