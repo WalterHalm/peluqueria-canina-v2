@@ -9,7 +9,7 @@ class Mascota(models.Model):
 
     name = fields.Char(string='Nombre', required=True, help="Introduzca el nombre de la mascota")
     fecha_nacimiento = fields.Date(string="Fecha de Nacimiento")
-    edad = fields.Integer(string="Edad", compute="_compute_edad", store=True)
+    edad = fields.Integer(string="Edad", compute="_compute_edad")
     raza = fields.Char(string="Raza")
     color = fields.Char(string="Color")
     medida = fields.Char(string="Medidas")

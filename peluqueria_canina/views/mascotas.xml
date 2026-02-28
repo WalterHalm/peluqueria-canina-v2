@@ -11,8 +11,8 @@
             <t t-name="card">
               <div class="oe_kanban_card oe_kanban_global_click" 
                    style="border: 1px solid #d3d3d3; border-radius: 8px; padding: 10px; box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);">
-                <div class="o_kanban_image">
-                  <img t-att-src="'/web/image/peluqueria.mascota/' + record.id.raw_value + '/image'" alt="Mascota" style="max-width: 64px; max-height: 64px;" />
+                <div class="o_kanban_image" style="text-align: center; margin-bottom: 10px;">
+                  <img t-att-src="'/web/image/peluqueria.mascota/' + record.id.raw_value + '/image'" alt="Mascota" style="max-width: 120px; max-height: 120px; border-radius: 8px;" />
                 </div>
                 <div class="o_kanban_details">
                   <strong><field name="name" /></strong>
@@ -73,8 +73,10 @@
                 <group>
                   <field name="owner_id"/>
                   <field name="owner_phone" readonly="1"/>
-                  <field name="image" widget="image" class="oe_avatar" options="{'size': [200, 200]}"/>
                 </group>
+                <div class="text-center mt-3">
+                  <field name="image" widget="image" options="{'preview_image': 'image', 'size': [400, 400]}" style="width: 350px !important; height: 350px !important; object-fit: cover; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/>
+                </div>
               </div>
             </div>
             
