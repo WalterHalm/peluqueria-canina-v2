@@ -11,17 +11,11 @@
               parent="menu_ecommerce_pvc_root"
               sequence="10"/>
 
-    <menuitem id="menu_product_series"
-              name="Series"
-              parent="menu_catalog"
-              action="action_product_series"
-              sequence="10"/>
-
     <menuitem id="menu_pvc_windows"
               name="Ventanas PVC"
               parent="menu_catalog"
               action="action_pvc_windows"
-              sequence="20"/>
+              sequence="10"/>
 
     <menuitem id="menu_marketing"
               name="Marketing"

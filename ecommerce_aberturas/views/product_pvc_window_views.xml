@@ -9,9 +9,8 @@
             <xpath expr="//page[@name='general_information']" position="after">
                 <page string="Ventana PVC" invisible="not is_pvc_window">
                     <group>
-                        <group string="Serie y Clasificación">
+                        <group string="Identificación">
                             <field name="is_pvc_window"/>
-                            <field name="series_id"/>
                         </group>
                         <group string="Medidas">
                             <field name="width"/>
@@ -21,7 +20,6 @@
                     </group>
                     <group>
                         <group string="Características Técnicas">
-                            <field name="glass_type"/>
                             <field name="thermal_insulation"/>
                             <field name="acoustic_insulation"/>
                             <field name="security_level"/>
@@ -48,9 +46,6 @@
             <xpath expr="//filter[@name='inactive']" position="after">
                 <separator/>
                 <filter string="Ventanas PVC" name="pvc_windows" domain="[('is_pvc_window', '=', True)]"/>
-                <separator/>
-                <filter string="Serie" name="group_series" context="{'group_by': 'series_id'}"/>
-                <filter string="Tipo Vidrio" name="group_glass" context="{'group_by': 'glass_type'}"/>
             </xpath>
         </field>
     </record>

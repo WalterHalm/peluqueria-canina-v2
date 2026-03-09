@@ -28,8 +28,6 @@
     ],
     'data': [
         'security/ir.model.access.csv',
-        'data/product_series_data.xml',
-        'views/product_series_views.xml',
         'views/product_pvc_window_views.xml',
         'views/customer_testimonial_views.xml',
         'views/sale_order_views.xml',
