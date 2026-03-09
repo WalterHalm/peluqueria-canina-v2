@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- No se necesita este archivo en Odoo 19, los assets se definen en __manifest__.py -->
+</odoo>

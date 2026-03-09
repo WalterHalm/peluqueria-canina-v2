@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Homepage: Sección de Series -->
+    <template id="homepage_series_section" name="Series de Ventanas">
+        <section class="s_series_showcase py-5">
+            <div class="container">
+                <h2 class="text-center mb-5">Nuestras Series de Ventanas PVC</h2>
+                <div class="row">
+                    <t t-foreach="request.env['product.series'].sudo().search([('active', '=', True)])" t-as="series">
+                        <div class="col-md-3 mb-4">
+                            <div class="card h-100 shadow-sm">
+                                <img t-if="series.image" t-att-src="image_data_uri(series.image)" class="card-img-top" t-att-alt="series.name"/>
+                                <div class="card-body">
+                                    <h5 class="card-title" t-field="series.name"/>
+                                    <span class="badge badge-primary" t-field="series.quality_level"/>
+                                    <p class="card-text mt-2" t-field="series.description"/>
+                                    <a t-attf-href="/shop?series_id=#{series.id}" class="btn btn-primary btn-block">Ver Productos</a>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Homepage: Sección de Testimonios -->
+    <template id="homepage_testimonials_section" name="Testimonios de Clientes">
+        <section class="s_testimonials py-5 bg-light">
+            <div class="container">
+                <h2 class="text-center mb-5">Lo que dicen nuestros clientes</h2>
+                <div class="row">
+                    <t t-foreach="request.env['customer.testimonial'].sudo().search([('published', '=', True), ('featured', '=', True)], limit=3)" t-as="testimonial">
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <img t-if="testimonial.image" t-att-src="image_data_uri(testimonial.image)" 
+                                         class="rounded-circle mb-3" style="width: 80px; height: 80px; object-fit: cover;" 
+                                         t-att-alt="testimonial.name"/>
+                                    <h5 class="card-title" t-field="testimonial.name"/>
+                                    <div class="mb-2">
+                                        <t t-foreach="range(int(testimonial.rating))" t-as="star">
+                                            <i class="fa fa-star text-warning"/>
+                                        </t>
+                                    </div>
+                                    <p class="card-text" t-field="testimonial.testimonial"/>
+                                    <small class="text-muted" t-if="testimonial.verified_purchase">
+                                        <i class="fa fa-check-circle text-success"/> Compra Verificada
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+                <div class="text-center mt-4">
+                    <a href="/testimonials" class="btn btn-outline-primary">Ver todos los testimonios</a>
+                </div>
+            </div>
+        </section>
+    </template>
+
+    <!-- Página de Testimonios -->
+    <template id="testimonials_page" name="Testimonios">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <section class="py-5">
+                    <div class="container">
+                        <h1 class="text-center mb-5">Testimonios de Clientes</h1>
+                        <div class="row">
+                            <t t-foreach="testimonials" t-as="testimonial">
+                                <div class="col-md-6 mb-4">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="d-flex align-items-center mb-3">
+                                                <img t-if="testimonial.image" t-att-src="image_data_uri(testimonial.image)" 
+                                                     class="rounded-circle mr-3" style="width: 60px; height: 60px; object-fit: cover;" 
+                                                     t-att-alt="testimonial.name"/>
+                                                <div>
+                                                    <h5 class="mb-0" t-field="testimonial.name"/>
+                                                    <div>
+                                                        <t t-foreach="range(int(testimonial.rating))" t-as="star">
+                                                            <i class="fa fa-star text-warning"/>
+                                                        </t>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <p t-field="testimonial.testimonial"/>
+                                            <small class="text-muted">
+                                                <t t-field="testimonial.date"/>
+                                                <span t-if="testimonial.verified_purchase" class="ml-2">
+                                                    <i class="fa fa-check-circle text-success"/> Compra Verificada
+                                                </span>
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </t>
+    </template>
+
+    <!-- Heredar página de producto para agregar especificaciones técnicas y descarga PDF -->
+    <template id="product_pvc_specifications" inherit_id="website_sale.product">
+        <xpath expr="//div[@id='product_details']" position="inside">
+            <t t-if="product.is_pvc_window">
+                <hr class="mt-4 mb-4"/>
+                <h4>Especificaciones Técnicas</h4>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li t-if="product.series_id"><strong>Serie:</strong> <span t-field="product.series_id.name"/></li>
+                            <li t-if="product.width"><strong>Ancho:</strong> <span t-field="product.width"/> cm</li>
+                            <li t-if="product.height"><strong>Alto:</strong> <span t-field="product.height"/> cm</li>
+                            <li t-if="product.glass_type"><strong>Tipo de Vidrio:</strong> <span t-field="product.glass_type"/></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li t-if="product.thermal_insulation"><strong>Aislamiento Térmico:</strong> <span t-field="product.thermal_insulation"/></li>
+                            <li t-if="product.acoustic_insulation"><strong>Aislamiento Acústico:</strong> <span t-field="product.acoustic_insulation"/></li>
+                            <li t-if="product.security_level"><strong>Nivel de Seguridad:</strong> <span t-field="product.security_level"/></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Botón de descarga de ficha técnica -->
+                <div class="mt-3" t-if="product.technical_sheet">
+                    <a t-attf-href="/web/content/product.template/#{product.id}/technical_sheet/#{product.technical_sheet_filename}?download=true" 
+                       class="btn btn-outline-primary">
+                        <i class="fa fa-download"/> Descargar Ficha Técnica PDF
+                    </a>
+                </div>
+            </t>
+        </xpath>
+    </template>
+
+    <!-- Portal: Seguimiento de Pedido -->
+    <template id="portal_order_tracking" name="Seguimiento de Pedido">
+        <t t-call="portal.portal_layout">
+            <div class="container mt-4">
+                <h3>Seguimiento de Pedido <span t-field="order.name"/></h3>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h5>Estado del Pedido</h5>
+                                <div class="progress" style="height: 30px;">
+                                    <div class="progress-bar bg-success" role="progressbar" 
+                                         t-att-style="'width: ' + str(tracking_progress) + '%'">
+                                        <t t-esc="order.tracking_status"/>
+                                    </div>
+                                </div>
+                                <ul class="list-unstyled mt-4">
+                                    <li><i class="fa fa-check-circle text-success"/> Pedido Confirmado</li>
+                                    <li t-att-class="'text-success' if order.tracking_status in ['production', 'quality', 'packaging', 'shipped', 'in_transit', 'delivered'] else 'text-muted'">
+                                        <i t-att-class="'fa fa-check-circle text-success' if order.tracking_status in ['production', 'quality', 'packaging', 'shipped', 'in_transit', 'delivered'] else 'fa fa-circle-o'"/> 
+                                        En Producción
+                                    </li>
+                                    <li t-att-class="'text-success' if order.tracking_status in ['shipped', 'in_transit', 'delivered'] else 'text-muted'">
+                                        <i t-att-class="'fa fa-check-circle text-success' if order.tracking_status in ['shipped', 'in_transit', 'delivered'] else 'fa fa-circle-o'"/> 
+                                        Enviado
+                                    </li>
+                                    <li t-att-class="'text-success' if order.tracking_status == 'delivered' else 'text-muted'">
+                                        <i t-att-class="'fa fa-check-circle text-success' if order.tracking_status == 'delivered' else 'fa fa-circle-o'"/> 
+                                        Entregado
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <h5>Información de Envío</h5>
+                                <p><strong>Entrega Estimada:</strong> <t t-field="order.estimated_delivery"/></p>
+                                <p t-if="order.tracking_url">
+                                    <a t-att-href="order.tracking_url" target="_blank" class="btn btn-primary">
+                                        <i class="fa fa-truck"/> Rastrear Envío
+                                    </a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

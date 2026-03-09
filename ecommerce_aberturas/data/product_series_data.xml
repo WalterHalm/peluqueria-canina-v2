@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <record id="series_economic" model="product.series">
+            <field name="name">Serie Económica</field>
+            <field name="code">ECO</field>
+            <field name="sequence">10</field>
+            <field name="quality_level">economic</field>
+            <field name="description"><![CDATA[
+                <p>Ventanas PVC de línea económica, ideales para proyectos con presupuesto ajustado sin sacrificar calidad.</p>
+                <ul>
+                    <li>Perfil de 3 cámaras</li>
+                    <li>Vidrio simple o doble</li>
+                    <li>Garantía 5 años</li>
+                </ul>
+            ]]></field>
+        </record>
+
+        <record id="series_standard" model="product.series">
+            <field name="name">Serie Estándar</field>
+            <field name="code">STD</field>
+            <field name="sequence">20</field>
+            <field name="quality_level">standard</field>
+            <field name="description"><![CDATA[
+                <p>Ventanas PVC de línea estándar, equilibrio perfecto entre calidad y precio.</p>
+                <ul>
+                    <li>Perfil de 5 cámaras</li>
+                    <li>Vidrio doble hermético</li>
+                    <li>Garantía 10 años</li>
+                </ul>
+            ]]></field>
+        </record>
+
+        <record id="series_premium" model="product.series">
+            <field name="name">Serie Premium</field>
+            <field name="code">PREM</field>
+            <field name="sequence">30</field>
+            <field name="quality_level">premium</field>
+            <field name="description"><![CDATA[
+                <p>Ventanas PVC de alta gama con excelente aislamiento térmico y acústico.</p>
+                <ul>
+                    <li>Perfil de 6 cámaras</li>
+                    <li>Vidrio doble bajo emisivo</li>
+                    <li>Garantía 15 años</li>
+                </ul>
+            ]]></field>
+        </record>
+
+        <record id="series_luxury" model="product.series">
+            <field name="name">Serie Luxury</field>
+            <field name="code">LUX</field>
+            <field name="sequence">40</field>
+            <field name="quality_level">luxury</field>
+            <field name="description"><![CDATA[
+                <p>Ventanas PVC de máxima calidad, diseño exclusivo y prestaciones superiores.</p>
+                <ul>
+                    <li>Perfil de 7 cámaras</li>
+                    <li>Vidrio triple bajo emisivo</li>
+                    <li>Garantía 20 años</li>
+                </ul>
+            ]]></field>
+        </record>
+
+    </data>
+</odoo>

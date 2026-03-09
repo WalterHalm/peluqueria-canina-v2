@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <menuitem id="menu_ecommerce_pvc_root"
+              name="E-commerce PVC"
+              sequence="10"
+              web_icon="ecommerce_aberturas,static/description/icon.png"/>
+
+    <menuitem id="menu_catalog"
+              name="Catálogo"
+              parent="menu_ecommerce_pvc_root"
+              sequence="10"/>
+
+    <menuitem id="menu_product_series"
+              name="Series"
+              parent="menu_catalog"
+              action="action_product_series"
+              sequence="10"/>
+
+    <menuitem id="menu_pvc_windows"
+              name="Ventanas PVC"
+              parent="menu_catalog"
+              action="action_pvc_windows"
+              sequence="20"/>
+
+    <menuitem id="menu_marketing"
+              name="Marketing"
+              parent="menu_ecommerce_pvc_root"
+              sequence="20"/>
+
+    <menuitem id="menu_testimonials"
+              name="Testimonios"
+              parent="menu_marketing"
+              action="action_customer_testimonial"
+              sequence="10"/>
+
+    <menuitem id="menu_sales"
+              name="Ventas"
+              parent="menu_ecommerce_pvc_root"
+              sequence="30"/>
+
+    <menuitem id="menu_sale_orders"
+              name="Pedidos"
+              parent="menu_sales"
+              action="sale.action_orders"
+              sequence="10"/>
+
+</odoo>

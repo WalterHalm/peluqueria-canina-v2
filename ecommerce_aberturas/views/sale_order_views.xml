@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="view_sale_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="customer_type"/>
+            </xpath>
+            <xpath expr="//page[@name='other_information']" position="after">
+                <page string="Seguimiento">
+                    <group>
+                        <group>
+                            <field name="tracking_status"/>
+                            <field name="estimated_delivery"/>
+                        </group>
+                        <group>
+                            <field name="tracking_url" widget="url"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_order_tree_inherit" model="ir.ui.view">
+        <field name="name">sale.order.tree.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='state']" position="before">
+                <field name="tracking_status" optional="show"/>
+                <field name="customer_type" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

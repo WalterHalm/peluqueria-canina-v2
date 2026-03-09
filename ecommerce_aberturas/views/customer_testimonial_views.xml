@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="view_customer_testimonial_tree" model="ir.ui.view">
+        <field name="name">customer.testimonial.list</field>
+        <field name="model">customer.testimonial</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date"/>
+                <field name="name"/>
+                <field name="rating"/>
+                <field name="product_id"/>
+                <field name="published"/>
+                <field name="featured"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_customer_testimonial_search" model="ir.ui.view">
+        <field name="name">customer.testimonial.search</field>
+        <field name="model">customer.testimonial</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Testimonios">
+                <field name="name"/>
+                <field name="product_id"/>
+                <separator/>
+                <filter string="Publicados" name="filter_published" domain="[('published', '=', True)]"/>
+                <filter string="Destacados" name="filter_featured" domain="[('featured', '=', True)]"/>
+                <filter string="Compra Verificada" name="filter_verified" domain="[('verified_purchase', '=', True)]"/>
+                <group>
+                    <filter string="Producto" name="group_product" context="{'group_by': 'product_id'}"/>
+                    <filter string="Valoración" name="group_rating" context="{'group_by': 'rating'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_customer_testimonial_form" model="ir.ui.view">
+        <field name="name">customer.testimonial.form</field>
+        <field name="model">customer.testimonial</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="Nombre del Cliente"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="partner_id"/>
+                            <field name="email"/>
+                            <field name="rating"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="product_id"/>
+                            <field name="sale_order_id"/>
+                            <field name="verified_purchase"/>
+                            <field name="published"/>
+                            <field name="featured"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="testimonial" placeholder="Escribe aquí el testimonio del cliente..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_customer_testimonial" model="ir.actions.act_window">
+        <field name="name">Testimonios de Clientes</field>
+        <field name="res_model">customer.testimonial</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_customer_testimonial_search"/>
+    </record>
+
+</odoo>

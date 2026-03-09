@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_series_public,product.series.public,model_product_series,base.group_public,1,0,0,0
+access_product_series_user,product.series.user,model_product_series,base.group_user,1,1,1,1
+access_testimonial_public,testimonial.public,model_customer_testimonial,base.group_public,1,0,0,0
+access_testimonial_user,testimonial.user,model_customer_testimonial,base.group_user,1,1,1,1
+access_testimonial_portal,testimonial.portal,model_customer_testimonial,base.group_portal,1,0,1,0
