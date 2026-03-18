@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Smart button en Orden de Compra -->
+    <record id="purchase_order_form_inherit_pacas" model="ir.ui.view">
+        <field name="name">purchase.order.form.inherit.pacas</field>
+        <field name="model">purchase.order</field>
+        <field name="inherit_id" ref="purchase.purchase_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_pacas_containers" type="object"
+                        class="oe_stat_button" icon="fa-truck"
+                        invisible="pacas_container_count == 0">
+                    <field name="pacas_container_count" widget="statinfo"
+                           string="Contenedores"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Campos de trazabilidad en Orden de Fabricación -->
+    <record id="mrp_production_form_inherit_pacas" model="ir.ui.view">
+        <field name="name">mrp.production.form.inherit.pacas</field>
+        <field name="model">mrp.production</field>
+        <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='miscellaneous']//field[@name='origin']" position="after">
+                <field name="pacas_container_id"/>
+                <field name="pacas_classification_batch_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Campo contenedor en Transferencias -->
+    <record id="stock_picking_form_inherit_pacas" model="ir.ui.view">
+        <field name="name">stock.picking.form.inherit.pacas</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date_done']" position="after">
+                <field name="pacas_container_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

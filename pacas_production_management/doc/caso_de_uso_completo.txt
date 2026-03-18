@@ -1,0 +1,321 @@
+# CASO DE USO: Contenedor CONT-2026-0001 — Proveedor "TextilWorld USA"
+# =====================================================================
+# Flujo completo: Compra → Recepción → Clasificación → Empacado → Paletizado → Venta
+#
+# Escenario: Se compra un contenedor 40HC de ropa usada a granel (20,000 lb).
+# Se clasifica en 3 categorías, se empacan 4 pacas y se despachan al cliente.
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 0: CONFIGURACIÓN PREVIA (datos maestros)
+# ═══════════════════════════════════════════════════════════════════════
+#
+# 0.1 Contactos
+#     - Crear proveedor: "TextilWorld USA" (tipo Empresa)
+#     - Crear cliente:   "Distribuidora Centroamérica" (tipo Empresa)
+#
+# 0.2 Unidad de Medida
+#     Ir a Inventario > Configuración > UdM
+#     En categoría "Peso", agregar "lb" con factor 0.453592 respecto a kg.
+#
+# 0.3 Productos (todos tipo Almacenable / Storable)
+#     ┌──────────────────────────────────────┬──────────┬─────────────┬──────────┐
+#     │ Producto                             │ Ref.Int. │ UdM         │ Tracking │
+#     ├──────────────────────────────────────┼──────────┼─────────────┼──────────┤
+#     │ Ropa Usada a Granel                  │ RUG-001  │ lb          │ Por Lote │
+#     │ Ropa Mujer Premium (clasificada)     │ CL-WP    │ lb          │ Por Lote │
+#     │ Ropa Hombre Grado A (clasificada)    │ CL-MA    │ lb          │ Por Lote │
+#     │ Zapatos Grado B (clasificado)        │ CL-SB    │ lb          │ Por Lote │
+#     │ Paca Mujer Premium 100lb             │ PACA-WP  │ Unidades    │ Por Lote │
+#     │ Paca Hombre Grado A 100lb            │ PACA-MA  │ Unidades    │ Por Lote │
+#     │ Paca Zapatos Grado B 80lb            │ PACA-SB  │ Unidades    │ Por Lote │
+#     │ Desperdicio / Scrap                  │ WASTE    │ lb          │ Ninguno  │
+#     └──────────────────────────────────────┴──────────┴─────────────┴──────────┘
+#
+# 0.4 Listas de Materiales (BoM) — Menú: Fabricación > BoM
+#     a) Producto: "Paca Mujer Premium 100lb" (PACA-WP), Cantidad: 1 ud
+#        Componente: "Ropa Mujer Premium (clasificada)" — 100 lb
+#
+#     b) Producto: "Paca Hombre Grado A 100lb" (PACA-MA), Cantidad: 1 ud
+#        Componente: "Ropa Hombre Grado A (clasificada)" — 100 lb
+#
+#     c) Producto: "Paca Zapatos Grado B 80lb" (PACA-SB), Cantidad: 1 ud
+#        Componente: "Zapatos Grado B (clasificado)" — 80 lb
+#
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 1: ORDEN DE COMPRA (módulo nativo Purchase)
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Menú: Compras > Pedidos de Compra > Nuevo
+#
+#   Proveedor:    TextilWorld USA
+#   Línea:        Ropa Usada a Granel (RUG-001) — 20,000 lb — $0.15/lb
+#   Total:        $3,000.00
+#
+#   → Clic "Confirmar Pedido" (estado pasa a "Orden de Compra")
+#   → Anotar referencia: PO00001
+#
+# TEST 1.1: Verificar que el pedido queda en estado "Orden de Compra"
+# TEST 1.2: Verificar que se generó una recepción pendiente (smart button "Recepción")
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 2: REGISTRO DE CONTENEDOR (módulo custom)
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Menú: Pacas Production > Containers > Nuevo
+#
+#   Número Contenedor:  MSKU-7234561
+#   Tipo:               40 HC
+#   Proveedor:          TextilWorld USA
+#   Orden de Compra:    PO00001
+#   Peso Bruto:         22,500 lb
+#   Peso Neto:          20,000 lb
+#   Peso Tara:             500 lb
+#
+#   → Se genera automáticamente: CONT-2026-0001
+#   → Peso Utilizable calculado: 19,500 lb (neto - tara)
+#   → Estado: Borrador
+#
+# TEST 2.1: Verificar referencia secuencial CONT-2026-XXXX
+# TEST 2.2: Verificar cálculo peso utilizable = 20,000 - 500 = 19,500 lb
+# TEST 2.3: Verificar que el smart button "Containers" aparece en PO00001
+# TEST 2.4: Clic "Receive" → estado cambia a "Received", fecha se auto-llena
+# TEST 2.5: Clic "Start Process" → estado cambia a "In Process"
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 3: CLASIFICACIÓN (módulo custom)
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Desde el contenedor CONT-2026-0001, clic botón "New Classification"
+# (o Menú: Pacas Production > Classifications > Nuevo)
+#
+#   Contenedor:   CONT-2026-0001 (auto-llenado)
+#   Operadores:   Admin (seleccionar usuario)
+#   → Clic "Start" → estado "In Progress", fecha inicio auto
+#
+#   Líneas de clasificación:
+#   ┌────┬───────────┬─────────┬──────────────────────────────┬───────────┐
+#   │ #  │ Categoría │ Grado   │ Producto Resultante          │ Peso (lb) │
+#   ├────┼───────────┼─────────┼──────────────────────────────┼───────────┤
+#   │ 1  │ Women     │ Premium │ Ropa Mujer Premium (CL-WP)   │  5,000    │
+#   │ 2  │ Men       │ Grade A │ Ropa Hombre Grado A (CL-MA)  │  6,000    │
+#   │ 3  │ Shoes     │ Grade B │ Zapatos Grado B (CL-SB)      │  4,000    │
+#   │ 4  │ Other     │ Waste   │ Desperdicio (WASTE)           │  4,500    │
+#   └────┴───────────┴─────────┴──────────────────────────────┴───────────┘
+#   Total batch: 19,500 lb
+#
+#   → Clic "Validate" → estado "Done", fecha fin auto, lotes creados
+#
+# TEST 3.1: Verificar referencia CLAS-2026-XXXX
+# TEST 3.2: Verificar Total Weight = 19,500 lb
+# TEST 3.3: Verificar que Available Weight = 0 lb (19,500 - 19,500)
+# TEST 3.4: Validar → verificar que se crearon lotes automáticos para cada línea
+#           (excepto WASTE que tiene tracking = Ninguno)
+# TEST 3.5: Volver al contenedor → Classified Weight = 19,500 lb
+# TEST 3.6: Volver al contenedor → Waste Weight = 4,500 lb
+# TEST 3.7: Volver al contenedor → Pending Weight = 0 lb
+# TEST 3.8: Smart button "Classifications" muestra 1
+#
+# TEST 3.9 (negativo): Crear otra clasificación con 100 lb adicionales
+#           → Al validar debe dar error: excede peso utilizable
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 4: MARCAR CONTENEDOR COMO CLASIFICADO
+# ═══════════════════════════════════════════════════════════════════════
+#
+# En CONT-2026-0001:
+#   → Clic "Mark Classified" → estado "Classified"
+#
+# TEST 4.1: Verificar estado = "Classified"
+# TEST 4.2: Botón "New Classification" ya no visible
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 5: ÓRDENES DE PACA — Empacado (módulo custom)
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Menú: Pacas Production > Bale Orders > Nuevo
+#
+# Crear 4 órdenes de paca:
+#
+# ── Paca 1: Mujer Premium ──────────────────────────────────────────
+#   Contenedor:        CONT-2026-0001
+#   Bale Product:      Paca Mujer Premium 100lb (PACA-WP)
+#   Source Material:   Ropa Mujer Premium (CL-WP)
+#   Target Weight:     100 lb
+#   → Clic "Ready" → estado "Ready"
+#   → Clic "Pack"  → crea MO automáticamente, estado "Packed"
+#   → Editar Actual Weight: 102 lb
+#   → Clic "Validate" → estado "Validated"
+#
+# ── Paca 2: Mujer Premium ──────────────────────────────────────────
+#   (misma config que Paca 1)
+#   Actual Weight: 98 lb → Ready → Pack → Validate
+#
+# ── Paca 3: Hombre Grado A ─────────────────────────────────────────
+#   Bale Product:      Paca Hombre Grado A 100lb (PACA-MA)
+#   Source Material:   Ropa Hombre Grado A (CL-MA)
+#   Target Weight:     100 lb
+#   Actual Weight:     101 lb → Ready → Pack → Validate
+#
+# ── Paca 4: Zapatos Grado B ────────────────────────────────────────
+#   Bale Product:      Paca Zapatos Grado B 80lb (PACA-SB)
+#   Source Material:   Zapatos Grado B (CL-SB)
+#   Target Weight:     80 lb
+#   Actual Weight:     79 lb → Ready → Pack → Validate
+#
+# TEST 5.1: Verificar referencia PACA-2026-XXXX en cada orden
+# TEST 5.2: Al hacer "Pack", verificar que se creó MO (campo Manufacturing Order)
+# TEST 5.3: Verificar que la MO tiene origin = "PACA-2026-XXXX"
+# TEST 5.4: Verificar que la MO tiene campo Container = CONT-2026-0001
+# TEST 5.5: Verificar que se creó lote automático para la paca
+# TEST 5.6: En el contenedor, smart button "Bales" = 4, "MOs" = 4
+#
+# TEST 5.7 (negativo): Intentar "Validate" sin peso actual → error
+# TEST 5.8 (negativo): Intentar "Pack" sin BoM en el producto → error
+# TEST 5.9 (negativo): Intentar "Pack" en estado Draft → error
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 6: CERRAR CONTENEDOR
+# ═══════════════════════════════════════════════════════════════════════
+#
+# En CONT-2026-0001:
+#   → Clic "Close Container" → confirmar → estado "Closed"
+#
+# TEST 6.1: Verificar estado = "Closed"
+# TEST 6.2: Verificar que no se pueden crear más clasificaciones ni cambiar estado
+# TEST 6.3 (negativo): Si hubiera peso pendiente > 0.5 lb → error al cerrar
+# TEST 6.4 (negativo): Si hubiera batches abiertos → error al cerrar
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 7: PALETIZADO (módulo custom)
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Menú: Pacas Production > Pallets > Nuevo
+#
+#   Cliente Destino:  Distribuidora Centroamérica
+#   Pacas:            Seleccionar las 4 pacas validadas
+#                     (PACA-2026-0001, 0002, 0003, 0004)
+#
+#   → Total Bales calculado: 4
+#   → Total Weight calculado: 102 + 98 + 101 + 79 = 380 lb
+#   → Clic "Ready for Dispatch" → estado "Ready for Dispatch"
+#
+# TEST 7.1: Verificar referencia PALL-2026-XXXX
+# TEST 7.2: Verificar Total Bales = 4
+# TEST 7.3: Verificar Total Weight = 380 lb
+# TEST 7.4: Solo se pueden agregar pacas en estado "Validated"
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 8: ORDEN DE VENTA (módulo nativo Sales)
+# ═══════════════════════════════════════════════════════════════════════
+#
+# Menú: Ventas > Pedidos > Nuevo
+#
+#   Cliente:  Distribuidora Centroamérica
+#   Líneas:
+#   ┌──────────────────────────────────┬──────┬────────┬──────────┐
+#   │ Producto                         │ Cant │ Precio │ Subtotal │
+#   ├──────────────────────────────────┼──────┼────────┼──────────┤
+#   │ Paca Mujer Premium 100lb         │  2   │ $85.00 │  $170.00 │
+#   │ Paca Hombre Grado A 100lb        │  1   │ $65.00 │   $65.00 │
+#   │ Paca Zapatos Grado B 80lb        │  1   │ $45.00 │   $45.00 │
+#   └──────────────────────────────────┴──────┴────────┴──────────┘
+#   Total: $280.00
+#
+#   → Clic "Confirmar"
+#   → Procesar entrega (smart button "Delivery")
+#
+# TEST 8.1: Verificar orden confirmada
+# TEST 8.2: Verificar que se generó delivery order
+# TEST 8.3: Validar entrega → cantidades entregadas
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# PASO 9: DESPACHO DEL PALLET
+# ═══════════════════════════════════════════════════════════════════════
+#
+# En PALL-2026-0001:
+#   → Clic "Dispatch" → estado "Dispatched"
+#
+# TEST 9.1: Verificar estado = "Dispatched"
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# RESUMEN DE TRAZABILIDAD
+# ═══════════════════════════════════════════════════════════════════════
+#
+#   PO00001 (Compra $3,000)
+#     └─ CONT-2026-0001 (40HC, 19,500 lb útiles)
+#          └─ CLAS-2026-0001 (19,500 lb clasificadas)
+#               ├─ Línea 1: Women/Premium  → CL-WP  5,000 lb → Lote auto
+#               ├─ Línea 2: Men/Grade A    → CL-MA  6,000 lb → Lote auto
+#               ├─ Línea 3: Shoes/Grade B  → CL-SB  4,000 lb → Lote auto
+#               └─ Línea 4: Other/Waste    → WASTE  4,500 lb
+#
+#          └─ Pacas generadas:
+#               ├─ PACA-2026-0001 → MO → Paca Mujer Premium  102 lb ─┐
+#               ├─ PACA-2026-0002 → MO → Paca Mujer Premium   98 lb ─┤
+#               ├─ PACA-2026-0003 → MO → Paca Hombre Grado A 101 lb ─┼─ PALL-2026-0001
+#               └─ PACA-2026-0004 → MO → Paca Zapatos Grado B 79 lb ─┘    380 lb total
+#                                                                          → Dist. Centroamérica
+#                                                                          → SO (Venta $280)
+#
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# CHECKLIST DE TESTS NEGATIVOS / EDGE CASES
+# ═══════════════════════════════════════════════════════════════════════
+#
+# ┌─────┬──────────────────────────────────────────────────────┬──────────────────┐
+# │  #  │ Acción                                               │ Resultado        │
+# ├─────┼──────────────────────────────────────────────────────┼──────────────────┤
+# │ N1  │ Clasificar más peso del utilizable                   │ ValidationError  │
+# │ N2  │ Cerrar contenedor con peso pendiente > 0.5 lb        │ UserError        │
+# │ N3  │ Cerrar contenedor con batches abiertos               │ UserError        │
+# │ N4  │ Validar clasificación sin líneas                     │ UserError        │
+# │ N5  │ Pack bale sin BoM configurada                        │ UserError        │
+# │ N6  │ Pack bale en estado Draft (no Ready)                 │ UserError        │
+# │ N7  │ Validate bale sin peso actual registrado             │ UserError        │
+# │ N8  │ Start Process en contenedor no "Received"            │ UserError        │
+# │ N9  │ Mark Classified en contenedor no "In Process"        │ UserError        │
+# │ N10 │ Cancelar bale con MO activa → MO se cancela también │ MO → cancel      │
+# └─────┴──────────────────────────────────────────────────────┴──────────────────┘
+#
+# ═══════════════════════════════════════════════════════════════════════
+
+
+# ═══════════════════════════════════════════════════════════════════════
+# MÉTRICAS DEL CASO DE USO
+# ═══════════════════════════════════════════════════════════════════════
+#
+#   Costo compra:           $3,000.00 (20,000 lb × $0.15)
+#   Ingreso venta:            $280.00 (4 pacas)
+#   Peso total clasificado: 19,500 lb
+#   Desperdicio:             4,500 lb (23.1%)
+#   Pacas producidas:             4
+#   Peso empacado:             380 lb
+#   Material restante sin empacar:
+#     - Mujer Premium:  5,000 - 200 = 4,800 lb
+#     - Hombre Grado A: 6,000 - 101 = 5,899 lb
+#     - Zapatos Grado B: 4,000 -  79 = 3,921 lb
+#
+# ═══════════════════════════════════════════════════════════════════════

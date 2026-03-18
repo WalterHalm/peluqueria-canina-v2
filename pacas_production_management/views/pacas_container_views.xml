@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pacas_container_form_view" model="ir.ui.view">
+        <field name="name">pacas.container.form</field>
+        <field name="model">pacas.container</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_receive" string="Recibir"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_start_process" string="Iniciar Proceso"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'received'"/>
+                    <button name="action_create_classification" string="Nueva Clasificación"
+                            type="object" class="oe_highlight"
+                            invisible="state not in ('received', 'in_process')"/>
+                    <button name="action_mark_classified" string="Marcar Clasificado"
+                            type="object"
+                            invisible="state != 'in_process'"/>
+                    <button name="action_close" string="Cerrar Contenedor"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'classified'"
+                            confirm="¿Está seguro? Esto cerrará el contenedor permanentemente."/>
+                    <button name="action_cancel" string="Cancelar"
+                            type="object"
+                            invisible="state in ('closed', 'cancelled')"/>
+                    <button name="action_draft" string="Restablecer a Borrador"
+                            type="object"
+                            invisible="state != 'cancelled'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,received,in_process,classified,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_classifications" type="object"
+                                class="oe_stat_button" icon="fa-th-list">
+                            <field name="classification_count" widget="statinfo"
+                                   string="Clasificaciones"/>
+                        </button>
+                        <button name="action_view_productions" type="object"
+                                class="oe_stat_button" icon="fa-cogs">
+                            <field name="production_count" widget="statinfo"
+                                   string="OFs"/>
+                        </button>
+                        <button name="action_view_pickings" type="object"
+                                class="oe_stat_button" icon="fa-truck">
+                            <field name="picking_count" widget="statinfo"
+                                   string="Transferencias"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group string="General">
+                            <field name="container_number"/>
+                            <field name="container_type"/>
+                            <field name="supplier_id"/>
+                            <field name="purchase_order_id"/>
+                            <field name="lot_id"/>
+                            <field name="arrival_date"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                        <group string="Pesos">
+                            <field name="gross_weight"/>
+                            <field name="net_weight"/>
+                            <field name="tare_weight"/>
+                            <field name="usable_weight"/>
+                            <field name="classified_weight"/>
+                            <field name="waste_weight"/>
+                            <field name="pending_weight"
+                                   decoration-danger="pending_weight &gt; 0"
+                                   decoration-success="pending_weight &lt;= 0"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notas">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="pacas_container_list_view" model="ir.ui.view">
+        <field name="name">pacas.container.list</field>
+        <field name="model">pacas.container</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'cancelled'"
+                  decoration-success="state == 'closed'">
+                <field name="name"/>
+                <field name="container_number"/>
+                <field name="container_type"/>
+                <field name="supplier_id"/>
+                <field name="arrival_date"/>
+                <field name="net_weight"/>
+                <field name="classified_weight"/>
+                <field name="pending_weight"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'in_process'"
+                       decoration-success="state in ('classified', 'closed')"
+                       decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="pacas_container_search_view" model="ir.ui.view">
+        <field name="name">pacas.container.search</field>
+        <field name="model">pacas.container</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="container_number"/>
+                <field name="supplier_id"/>
+                <filter name="draft" string="Borrador" domain="[('state', '=', 'draft')]"/>
+                <filter name="received" string="Recibido" domain="[('state', '=', 'received')]"/>
+                <filter name="in_process" string="En Proceso" domain="[('state', '=', 'in_process')]"/>
+                <filter name="classified" string="Clasificado" domain="[('state', '=', 'classified')]"/>
+                <filter name="closed" string="Cerrado" domain="[('state', '=', 'closed')]"/>
+                <separator/>
+                <group>
+                    <filter name="group_supplier" string="Proveedor" context="{'group_by': 'supplier_id'}"/>
+                    <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="group_type" string="Tipo" context="{'group_by': 'container_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pacas_container" model="ir.actions.act_window">
+        <field name="name">Contenedores</field>
+        <field name="res_model">pacas.container</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="pacas_container_search_view"/>
+        <field name="context">{'search_default_in_process': 1}</field>
+    </record>
+</odoo>

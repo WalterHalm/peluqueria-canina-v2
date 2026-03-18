@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_pacas_root"
+              name="Producción de Pacas"
+              web_icon="pacas_production_management,static/description/icon.png"
+              sequence="55"/>
+
+    <menuitem id="menu_pacas_operations"
+              name="Operaciones"
+              parent="menu_pacas_root"
+              sequence="10"/>
+
+    <menuitem id="menu_pacas_container"
+              name="Contenedores"
+              parent="menu_pacas_operations"
+              action="action_pacas_container"
+              sequence="10"/>
+
+    <menuitem id="menu_pacas_classification"
+              name="Clasificaciones"
+              parent="menu_pacas_operations"
+              action="action_pacas_classification_batch"
+              sequence="20"/>
+</odoo>

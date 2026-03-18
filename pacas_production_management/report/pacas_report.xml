@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_bale_label" model="ir.actions.report">
+        <field name="name">Etiqueta de Paca</field>
+        <field name="model">mrp.production</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">pacas_production_management.report_bale_label</field>
+        <field name="report_file">pacas_production_management.report_bale_label</field>
+        <field name="binding_model_id" ref="mrp.model_mrp_production"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_bale_label">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="mo">
+                <t t-call="web.external_layout">
+                    <div class="page" style="text-align: center; padding-top: 40px;">
+                        <h1 style="font-size: 36px;">
+                            <t t-esc="mo.name"/>
+                        </h1>
+                        <h2>
+                            <t t-esc="mo.product_id.display_name"/>
+                        </h2>
+                        <table class="table table-bordered" style="width: 60%; margin: 20px auto;">
+                            <tr>
+                                <td><strong>Lote</strong></td>
+                                <td><t t-esc="mo.lot_producing_id.name or '-'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cantidad</strong></td>
+                                <td><t t-esc="mo.product_qty"/> <t t-esc="mo.product_uom_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Contenedor</strong></td>
+                                <td><t t-esc="mo.pacas_container_id.name or '-'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Origen</strong></td>
+                                <td><t t-esc="mo.origin or '-'"/></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fecha</strong></td>
+                                <td><t t-esc="mo.date_start" t-options="{'widget': 'date'}"/></td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

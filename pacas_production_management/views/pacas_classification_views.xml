@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="pacas_classification_batch_form_view" model="ir.ui.view">
+        <field name="name">pacas.classification.batch.form</field>
+        <field name="model">pacas.classification.batch</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_start" string="Iniciar Clasificación"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'draft'"/>
+                    <button name="action_validate" string="Validar y Generar OFs"
+                            type="object" class="oe_highlight"
+                            invisible="state != 'in_progress'"
+                            confirm="Esto generará órdenes de fabricación para cada línea con producto y LdM. ¿Continuar?"/>
+                    <button name="action_cancel" string="Cancelar"
+                            type="object"
+                            invisible="state in ('done', 'cancelled')"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,in_progress,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_productions" type="object"
+                                class="oe_stat_button" icon="fa-cogs"
+                                invisible="production_count == 0">
+                            <field name="production_count" widget="statinfo"
+                                   string="OFs Generadas"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="container_id"
+                                   readonly="state != 'draft'"/>
+                            <field name="lot_source_id"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="company_id" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="operator_ids" widget="many2many_tags"/>
+                            <field name="total_weight"/>
+                            <field name="available_weight"
+                                   decoration-danger="available_weight &lt; 0"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Líneas de Clasificación">
+                            <field name="line_ids"
+                                   readonly="state == 'done'">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="category_type"/>
+                                    <field name="grade"/>
+                                    <field name="product_id"/>
+                                    <field name="weight"/>
+                                    <field name="lot_result_id" readonly="1"/>
+                                    <field name="production_id" readonly="1"/>
+                                    <field name="remarks"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="pacas_classification_batch_list_view" model="ir.ui.view">
+        <field name="name">pacas.classification.batch.list</field>
+        <field name="model">pacas.classification.batch</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="container_id"/>
+                <field name="date_start"/>
+                <field name="total_weight"/>
+                <field name="production_count" string="OFs"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'in_progress'"
+                       decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="pacas_classification_batch_search_view" model="ir.ui.view">
+        <field name="name">pacas.classification.batch.search</field>
+        <field name="model">pacas.classification.batch</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="container_id"/>
+                <filter name="draft" string="Borrador" domain="[('state', '=', 'draft')]"/>
+                <filter name="in_progress" string="En Progreso" domain="[('state', '=', 'in_progress')]"/>
+                <filter name="done" string="Hecho" domain="[('state', '=', 'done')]"/>
+                <group>
+                    <filter name="group_container" string="Contenedor" context="{'group_by': 'container_id'}"/>
+                    <filter name="group_state" string="Estado" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pacas_classification_batch" model="ir.actions.act_window">
+        <field name="name">Clasificaciones</field>
+        <field name="res_model">pacas.classification.batch</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="pacas_classification_batch_search_view"/>
+    </record>
+</odoo>

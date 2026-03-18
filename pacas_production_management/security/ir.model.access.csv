@@ -1,0 +1,10 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_pacas_container_operator,pacas.container.operator,model_pacas_container,group_pacas_operator,1,1,1,0
+access_pacas_container_supervisor,pacas.container.supervisor,model_pacas_container,group_pacas_supervisor,1,1,1,0
+access_pacas_container_manager,pacas.container.manager,model_pacas_container,group_pacas_manager,1,1,1,1
+access_pacas_classification_batch_operator,pacas.classification.batch.operator,model_pacas_classification_batch,group_pacas_operator,1,1,1,0
+access_pacas_classification_batch_supervisor,pacas.classification.batch.supervisor,model_pacas_classification_batch,group_pacas_supervisor,1,1,1,0
+access_pacas_classification_batch_manager,pacas.classification.batch.manager,model_pacas_classification_batch,group_pacas_manager,1,1,1,1
+access_pacas_classification_line_operator,pacas.classification.line.operator,model_pacas_classification_line,group_pacas_operator,1,1,1,0
+access_pacas_classification_line_supervisor,pacas.classification.line.supervisor,model_pacas_classification_line,group_pacas_supervisor,1,1,1,0
+access_pacas_classification_line_manager,pacas.classification.line.manager,model_pacas_classification_line,group_pacas_manager,1,1,1,1
