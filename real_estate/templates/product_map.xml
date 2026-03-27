@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="product_detail_map" inherit_id="website_sale.product" name="Mapa de Ubicación del Producto">
+        <xpath expr="//div[@id='product_full_description']" position="after">
+            <t t-if="product.re_show_on_map and product.re_latitude and product.re_longitude">
+                <section class="container py-4">
+                    <h3 class="mb-3">Ubicación</h3>
+                    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+                    <div id="re_product_map"
+                         style="height: 400px; border-radius: 12px; z-index: 1;"
+                         t-att-data-lat="product.re_latitude"
+                         t-att-data-lng="product.re_longitude"
+                         t-att-data-name="product.name"
+                         t-att-data-address="product.re_address or ''"/>
+                    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"/>
+                    <script t-att-src="'/real_estate/static/src/js/product_map.js'"/>
+                </section>
+            </t>
+        </xpath>
+    </template>
+</odoo>

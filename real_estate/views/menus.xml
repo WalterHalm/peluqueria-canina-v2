@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root menu -->
+    <menuitem id="menu_real_estate_root" name="Real Estate" web_icon="real_estate,static/description/icon.png" sequence="90"/>
+
+    <!-- Captación -->
+    <menuitem id="menu_captacion" name="Captación" parent="menu_real_estate_root" sequence="10"
+              action="action_property_submissions"/>
+
+    <!-- iCal -->
+    <menuitem id="menu_ical" name="Calendarios iCal" parent="menu_real_estate_root" sequence="20"
+              action="action_ical_sync"/>
+</odoo>

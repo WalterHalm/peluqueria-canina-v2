@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="whatsapp_floating_button" inherit_id="website.layout" name="WhatsApp Flotante">
+        <xpath expr="//div[@id='wrapwrap']" position="inside">
+            <div class="re_floating_buttons">
+                <t t-set="wa_number" t-value="request.env['ir.config_parameter'].sudo().get_param('real_estate.whatsapp_number')"/>
+                <t t-set="fb_url" t-value="request.env['ir.config_parameter'].sudo().get_param('real_estate.facebook_url')"/>
+                <t t-set="ig_url" t-value="request.env['ir.config_parameter'].sudo().get_param('real_estate.instagram_url')"/>
+                <t t-set="tt_url" t-value="request.env['ir.config_parameter'].sudo().get_param('real_estate.tiktok_url')"/>
+
+                <a t-if="wa_number" t-attf-href="https://wa.me/#{wa_number}"
+                   class="re_btn_whatsapp" target="_blank" rel="noopener" title="WhatsApp">
+                    <i class="fa fa-whatsapp"/>
+                </a>
+                <a t-if="fb_url" t-att-href="fb_url"
+                   class="re_btn_facebook" target="_blank" rel="noopener" title="Facebook">
+                    <i class="fa fa-facebook"/>
+                </a>
+                <a t-if="ig_url" t-att-href="ig_url"
+                   class="re_btn_instagram" target="_blank" rel="noopener" title="Instagram">
+                    <i class="fa fa-instagram"/>
+                </a>
+                <a t-if="tt_url" t-att-href="tt_url"
+                   class="re_btn_tiktok" target="_blank" rel="noopener" title="TikTok">
+                    <i class="fa fa-music"/>
+                </a>
+            </div>
+        </xpath>
+    </template>
+</odoo>

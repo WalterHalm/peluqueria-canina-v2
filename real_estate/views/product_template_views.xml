@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="product_template_re_location_view" model="ir.ui.view">
+        <field name="name">product.template.re.location</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales']" position="after">
+                <page string="Ubicación" name="re_location">
+                    <group>
+                        <group>
+                            <field name="re_address"/>
+                            <field name="re_zone"/>
+                        </group>
+                        <group>
+                            <field name="re_latitude"/>
+                            <field name="re_longitude"/>
+                            <field name="re_show_on_map"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

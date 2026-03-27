@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="captacion_page" name="Captación de Propiedades">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5">
+                <h2 class="text-center mb-4">¿Tenés una propiedad? ¡Administrámosla!</h2>
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <form action="/captacion/submit" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                            <h5 class="mt-3">Tus datos</h5>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <input name="owner_name" class="form-control" placeholder="Tu nombre *" required="1"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input name="owner_email" type="email" class="form-control" placeholder="Email *" required="1"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input name="owner_phone" class="form-control" placeholder="Teléfono *" required="1"/>
+                                </div>
+                            </div>
+
+                            <h5 class="mt-4">Datos de la propiedad</h5>
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <input name="property_name" class="form-control" placeholder="Nombre de la propiedad *" required="1"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="property_type" class="form-select">
+                                        <option value="apartment">Apartamento</option>
+                                        <option value="house">Casa</option>
+                                        <option value="villa">Villa</option>
+                                        <option value="room">Habitación</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select name="listing_type" class="form-select">
+                                        <option value="rent">Alquiler</option>
+                                        <option value="sale">Venta</option>
+                                        <option value="both">Ambos</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-8">
+                                    <input name="address" class="form-control" placeholder="Dirección *" required="1"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input name="zone" class="form-control" placeholder="Zona / Barrio"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <input name="bedrooms" type="number" class="form-control" placeholder="Habitaciones" min="0"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <input name="capacity" type="number" class="form-control" placeholder="Capacidad" min="0"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <input name="price_per_night" type="number" class="form-control" placeholder="Precio por noche (ref.)"/>
+                                </div>
+                                <div class="col-12">
+                                    <textarea name="description" class="form-control" rows="4" placeholder="Descripción de la propiedad"/>
+                                </div>
+                                <div class="col-12">
+                                    <input name="amenities" class="form-control" placeholder="Amenidades (ej: WiFi, Piscina, A/C)"/>
+                                </div>
+                            </div>
+
+                            <h5 class="mt-4">Fotos</h5>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <input name="image_1" type="file" class="form-control" accept="image/*"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input name="image_2" type="file" class="form-control" accept="image/*"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <input name="image_3" type="file" class="form-control" accept="image/*"/>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    Enviar mi propiedad
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="captacion_thanks" name="Gracias por tu envío">
+        <t t-call="website.layout">
+            <div id="wrap" class="container py-5 text-center">
+                <i class="fa fa-check-circle fa-4x text-success mb-3"/>
+                <h2>¡Gracias! Recibimos tu propiedad.</h2>
+                <p class="lead">Nos pondremos en contacto a la brevedad para coordinar la visita.</p>
+                <a href="/" class="btn btn-primary mt-3">Volver al inicio</a>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_re_submission_user,real.estate.property.submission user,model_real_estate_property_submission,base.group_user,1,1,1,1
+access_re_submission_public,real.estate.property.submission public,model_real_estate_property_submission,,0,0,1,0
+access_re_ical_sync_user,real.estate.ical.sync user,model_real_estate_ical_sync,base.group_user,1,1,1,1
+access_re_blocked_period_user,real.estate.blocked.period user,model_real_estate_blocked_period,base.group_user,1,1,1,1
