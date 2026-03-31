@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Ubicación de stock 'Sorteos' se crea vía post_init_hook
+             para colgarla de warehouse.view_location_id (al mismo nivel que Stock) -->
+
+        <!-- Categoría pública "Rifas" para la tienda online -->
+        <record id="raffle_public_category" model="product.public.category">
+            <field name="name">Rifas</field>
+            <field name="sequence">100</field>
+        </record>
+    </data>
+</odoo>
